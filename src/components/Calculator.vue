@@ -1,70 +1,49 @@
 
-<script lang="ts">
+<script>
 export default {
   data() {
     return {
-      display: ''
+      display: '0',
+      keys: [
+        { content: '+', action: 'add' },
+        { content: '-', action: 'subtract' },
+        { content: '×', action: 'multiply' },
+        { content: '÷', action: 'divide' },
+        { content: '7', action: 'number' },
+        { content: '8', action: 'number' },
+        { content: '9', action: 'number' },
+        { content: '4', action: 'number' },
+        { content: '5', action: 'number' },
+        { content: '6', action: 'number' },
+        { content: '1', action: 'number' },
+        { content: '2', action: 'number' },
+        { content: '3', action: 'number' },
+        { content: '0', action: 'number' },
+        { content: '.', action: 'decimal' },
+        { content: 'C', action: 'clear' },
+        { content: '=', action: 'calculate' },
+      ],
     }
   },
   methods: {
-    appendToDisplay(value: string) {
-      this.display += value
+    handleClick(event) {
+      const key = event.target;
+      const displayedNum = this.display;
     },
-
-    clearDisplay() {
-      this.display = ''
-    },
-
-    calculateResult() {
-      try {
-        this.display = eval(this.display);
-      } catch (error) {
-        this.display = 'Error';
-      }
-    }
-
-
   }
 }
 </script>
 
 <template>
-  <html>
-
-  <head>
-    <title>Vue Calculator</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
-
-  <body>
-    <div class="container">
-      <div class="calculator">
-        <div class="calculator__display">{{ display }}</div>
-
-        <div class="calculator__keys">
-          <button @click="appendToDisplay('+')" class=" key--operator" data-action="add">+</button>
-          <button @click="appendToDisplay('-')" class=" key--operator" data-action="subtract">-</button>
-          <button @click="appendToDisplay('*')" class=" key--operator" data-action="multiply">&times;</button>
-          <button @click="appendToDisplay('/')" class=" key--operator" data-action="divide">÷</button>
-          <button @click="appendToDisplay('7')">7</button>
-          <button @click="appendToDisplay('8')">8</button>
-          <button @click="appendToDisplay('9')">9</button>
-          <button @click="appendToDisplay('4')">4</button>
-          <button @click="appendToDisplay('5')">5</button>
-          <button @click="appendToDisplay('6')">6</button>
-          <button @click="appendToDisplay('1')">1</button>
-          <button @click="appendToDisplay('2')">2</button>
-          <button @click="appendToDisplay('3')">3</button>
-          <button @click="appendToDisplay('0')">0</button>
-          <button data-action="decimal">.</button>
-          <button @click="clearDisplay" data-action="clear">AC</button>
-          <button @click="calculateResult()" class="key--equal" data-action="calculate">=</button>
-        </div>
+  <div class="container">
+    <div class="calculator">
+      <div class="calculator__display">{{ display }}</div>
+      <div class="calculator__keys" @click="handleClick">
+        <button v-for="key in keys" :key="key.content" :data-action="key.action"
+          :class="{ 'key--equal': key.action === 'calculate' }">{{ key.content }} </button>
       </div>
     </div>
-  </body>
-
-  </html>
+  </div>
 </template>
 
 
