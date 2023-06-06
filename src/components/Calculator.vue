@@ -1,9 +1,14 @@
-
 <script>
 export default {
   data() {
     return {
       display: '0',
+      calculatorData: {
+        firstValue: '',
+        operator: '',
+        modValue: '',
+        previousKeyType: '',
+      },
       keys: [
         { content: '+', action: 'add' },
         { content: '-', action: 'subtract' },
@@ -23,15 +28,130 @@ export default {
         { content: 'C', action: 'clear' },
         { content: '=', action: 'calculate' },
       ],
-    }
+    };
   },
   methods: {
     handleClick(event) {
       const key = event.target;
       const displayedNum = this.display;
+      const resultString = this.createResultString(key, displayedNum, this.calculatorData);
+
+      this.display = resultString;
+      this.updateCalculatorState(key, resultString, displayedNum);
+      this.updateVisualState(key);
     },
-  }
-}
+
+    calculate(n1, operator, n2) {
+      const firstNum = parseFloat(n1);
+      const secondNum = parseFloat(n2);
+      if (operator === 'add') return firstNum + secondNum;
+      if (operator === 'subtract') return firstNum - secondNum;
+      if (operator === 'multiply') return firstNum * secondNum;
+      if (operator === 'divide') return firstNum / secondNum;
+    },
+
+    getKeyType(key) {
+      const { action } = key.dataset;
+      if (!action) return 'number';
+      if (
+        action === 'add' ||
+        action === 'subtract' ||
+        action === 'multiply' ||
+        action === 'divide'
+      ) return 'operator';
+      // For everything else, return the action
+      return action;
+    },
+
+    createResultString(key, displayedNum, state) {
+      const keyContent = key.textContent;
+      const keyType = this.getKeyType(key);
+      const {
+        firstValue,
+        operator,
+        modValue,
+        previousKeyType,
+      } = state;
+
+      if (keyType === 'number') {
+        return displayedNum === '0' ||
+          previousKeyType === 'operator' ||
+          previousKeyType === 'calculate'
+          ? keyContent
+          : displayedNum + keyContent;
+      }
+
+      if (keyType === 'decimal') {
+        if (!displayedNum.includes('.')) return displayedNum + '.';
+        if (previousKeyType === 'operator' || previousKeyType === 'calculate') return '0.';
+        return displayedNum;
+      }
+
+      if (keyType === 'operator') {
+        return firstValue &&
+          operator &&
+          previousKeyType !== 'operator' &&
+          previousKeyType !== 'calculate'
+          ? this.calculate(firstValue, operator, displayedNum)
+          : displayedNum;
+      }
+
+      if (keyType === 'clear') return '0';
+
+      if (keyType === 'calculate') {
+        return firstValue
+          ? previousKeyType === 'calculate'
+            ? this.calculate(displayedNum, operator, modValue)
+            : this.calculate(firstValue, operator, displayedNum)
+          : displayedNum;
+      }
+    },
+
+    updateCalculatorState(key, calculatedValue, displayedNum) {
+      const keyType = this.getKeyType(key);
+      const {
+        firstValue,
+        operator,
+        modValue,
+        previousKeyType,
+      } = this.calculatorData;
+
+      this.calculatorData.previousKeyType = keyType;
+
+      if (keyType === 'operator') {
+        this.calculatorData.operator = key.dataset.action;
+        this.calculatorData.firstValue = firstValue &&
+          operator &&
+          previousKeyType !== 'operator' &&
+          previousKeyType !== 'calculate'
+          ? calculatedValue
+          : displayedNum;
+      }
+
+      if (keyType === 'calculate') {
+        this.calculatorData.modValue = firstValue && previousKeyType === 'calculate'
+          ? modValue
+          : displayedNum;
+      }
+
+      if (keyType === 'clear' && key.textContent === 'AC') {
+        this.calculatorData.firstValue = '';
+        this.calculatorData.modValue = '';
+        this.calculatorData.operator = '';
+        this.calculatorData.previousKeyType = '';
+      }
+    },
+
+    updateVisualState(key) {
+      const keyType = this.getKeyType(key);
+      const keys = Array.from(key.parentNode.children);
+      keys.forEach(k => k.classList.remove('is-depressed'));
+
+      if (keyType === 'operator') key.classList.add('is-depressed');
+      if (keyType === 'clear' && key.textContent !== 'C') key.textContent = 'C';
+    },
+  },
+};
 </script>
 
 <template>
@@ -45,7 +165,6 @@ export default {
     </div>
   </div>
 </template>
-
 
 <style scoped lang="scss">
 input,
@@ -117,4 +236,3 @@ button {
   grid-row: 2 / span 4;
 }
 </style>
-
