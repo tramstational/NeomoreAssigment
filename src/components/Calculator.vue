@@ -67,82 +67,8 @@ export default {
   </html>
 </template>
 
-<style scoped>
-html {
-  box-sizing: border-box;
-}
 
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-body {
-  margin: 0;
-}
-
-/* Responsive Images */
-
-embed,
-iframe,
-img,
-object,
-video {
-  max-width: 100%;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-ul,
-ol,
-li,
-p,
-pre,
-blockquote,
-figure,
-hr {
-  margin: 0;
-  padding-right: 0;
-  padding-left: 0;
-}
-
-a {
-  text-decoration: none;
-}
-
-a:focus {
-  outline: none;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  display: block;
-}
-
-/* Removes all decimals and discs from lists */
-
-ol,
-ul {
-  list-style: none;
-}
-
-/* 
- * Completely resets form items
- * ----------------------------
- * Super hard reset that removes all borders
- * and radiuses of all form items (including
- * checkboxes and radios)
- */
-
+<style scoped lang="scss">
 input,
 textarea,
 button {
@@ -155,44 +81,6 @@ button {
   outline: none;
   appearance: none;
   text-align: left;
-}
-
-input:hover,
-input:active,
-input:focus,
-textarea:hover,
-textarea:active,
-textarea:focus,
-button:hover,
-button:active,
-button:focus {
-  outline: none;
-}
-
-:root {
-  font-family: Helvetica, Arial, sans-serif;
-}
-
-html {
-  font-size: 175%;
-  font-weight: 300;
-  line-height: 1.3;
-}
-
-body {
-  align-items: center;
-  background-image: linear-gradient(236deg, #74ebd5, #acb6e5);
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-}
-
-.container {
-  max-width: 20em;
-}
-
-.container>p {
-  text-align: center;
 }
 
 .calculator {
@@ -208,7 +96,6 @@ body {
 .calculator__display {
   background-color: #222222;
   color: #fff;
-  font-size: 1.714285714em;
   padding: 0.5em 0.75em;
   text-align: right;
 }
@@ -251,3 +138,4 @@ body {
   grid-row: 2 / span 4;
 }
 </style>
+
