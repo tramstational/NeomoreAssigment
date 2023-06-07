@@ -56,6 +56,7 @@ export default defineComponent({
       ],
     };
   },
+
   methods: {
     handleClick(event: MouseEvent) {
       const key = event.target as HTMLButtonElement;
@@ -73,10 +74,12 @@ export default defineComponent({
     calculate(n1: string, operator: string, n2: string) {
       const firstNum = parseFloat(n1);
       const secondNum = parseFloat(n2);
-      if (operator === KeyType.Add) return firstNum + secondNum;
-      if (operator === KeyType.Subtract) return firstNum - secondNum;
-      if (operator === KeyType.Multiply) return firstNum * secondNum;
-      if (operator === KeyType.Divide) return firstNum / secondNum;
+      if (operator === KeyType.Add) return (firstNum + secondNum).toString()
+      if (operator === KeyType.Subtract) return (firstNum - secondNum).toString();
+      if (operator === KeyType.Multiply) return (firstNum * secondNum).toString();
+      if (operator === KeyType.Divide) return (firstNum / secondNum).toString();
+
+      return ''
     },
 
     getKeyType(key: HTMLElement) {
@@ -143,10 +146,12 @@ export default defineComponent({
             : this.calculate(firstValue, operator, displayedNum)
           : displayedNum;
       }
+
+      return ''
     },
 
     updateCalculatorState(
-      key: { dataset: { action: string }; textContent: string },
+      key: HTMLElement,
       calculatedValue: string,
       displayedNum: string
     ) {
@@ -161,7 +166,7 @@ export default defineComponent({
       this.calculatorData.previousKeyType = keyType;
 
       if (keyType === KeyType.Operator) {
-        this.calculatorData.operator = key.dataset.action;
+        this.calculatorData.operator = key.dataset.action as string;
         this.calculatorData.firstValue =
           firstValue &&
             operator &&
