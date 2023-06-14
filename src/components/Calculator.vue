@@ -261,4 +261,23 @@ button {
   grid-column: -2;
   grid-row: 2 / span 4;
 }
-</style>
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .calculator {
+    max-width: 90%;
+    /* Adjust the max-width as per your preference */
+  }
+
+  .calculator__keys {
+    grid-template-columns: repeat(3, 1fr);
+    /* Display 3 columns on smaller screens */
+  }
+}
+
+@media (max-width: 400px) {
+  .calculator__keys {
+    grid-template-columns: repeat(2, 1fr);
+    /* Display 2 columns on even smaller screens */
+  }
+}</style>
